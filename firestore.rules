@@ -1,0 +1,17 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Documento único donde vive la lista de contenedores del landing.
+    match /landing/containers {
+      // Cualquiera puede LEER, para que el landing público funcione sin login.
+      allow read: if true;
+
+      // Solo alguien con sesión iniciada (Firebase Authentication) puede
+      // escribir. Ya no depende de un PIN visual: esto es seguridad real
+      // aplicada del lado del servidor.
+      allow write: if request.auth != null;
+    }
+  }
+}
