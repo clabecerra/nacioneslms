@@ -263,11 +263,12 @@ const BUILD_VERSION = '__BUILD_VERSION__';
 (function renderBuildInfo(){
   const el = document.getElementById('build-info');
   if(!el) return;
-  // OJO: no comparar contra el literal '__BUILD_VERSION__' completo — el
-  // sed del workflow busca y reemplaza exactamente ese texto, así que si
-  // apareciera acá también quedaría reemplazado y esta detección se
-  // rompería en silencio. 'BUILD_VERSION' (sin guiones bajos) no matchea
-  // el patrón del sed.
+  // OJO: no comparar contra el marcador sin reemplazar completo, con los
+  // dos guiones bajos a cada lado — el sed del workflow busca y reemplaza
+  // exactamente ese texto en todo el archivo, así que si apareciera acá
+  // también quedaría reemplazado (hasta en este comentario) y la
+  // detección se rompería en silencio. Por eso se usa solo la palabra sin
+  // guiones bajos, que el sed no toca.
   const sinVersion = BUILD_VERSION.indexOf('BUILD_VERSION') !== -1;
   el.textContent = sinVersion ? 'sin versión (deploy manual)' : BUILD_VERSION;
 })();
