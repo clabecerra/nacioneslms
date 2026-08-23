@@ -216,10 +216,17 @@
   .login-form input.error{border-color:var(--bad);background:var(--bad-bg);}
   .login-form .btn{width:100%;justify-content:center;margin-top:4px;}
   .login-error{font-size:11.5px;color:var(--bad);margin-top:10px;}
+
+  .build-info{
+    text-align:center;margin:18px 0 10px;
+    font-size:10.5px;color:var(--muted);opacity:0.6;
+    letter-spacing:.2px;
+  }
 </style>
 </head>
 <body>
 <div id="app"></div>
+<div id="build-info" class="build-info"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -246,6 +253,24 @@ const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 // Todos los contenedores viven en un único documento: colección "landing", doc "containers"
 const containersRef = doc(db, "landing", "containers");
+
+// Reemplazado por el workflow de GitHub Actions al desplegar (ver
+// .github/workflows/firebase-hosting-merge.yml). Si este texto llega tal
+// cual al navegador, el despliegue no pasó por el workflow (por ejemplo,
+// un `firebase deploy` manual) y no hay forma confiable de saber qué
+// código quedó publicado.
+const BUILD_VERSION = '__BUILD_VERSION__';
+(function renderBuildInfo(){
+  const el = document.getElementById('build-info');
+  if(!el) return;
+  // OJO: no comparar contra el literal '__BUILD_VERSION__' completo — el
+  // sed del workflow busca y reemplaza exactamente ese texto, así que si
+  // apareciera acá también quedaría reemplazado y esta detección se
+  // rompería en silencio. 'BUILD_VERSION' (sin guiones bajos) no matchea
+  // el patrón del sed.
+  const sinVersion = BUILD_VERSION.indexOf('BUILD_VERSION') !== -1;
+  el.textContent = sinVersion ? 'sin versión (deploy manual)' : BUILD_VERSION;
+})();
 
 let view = 'landing';
 let items = [];
