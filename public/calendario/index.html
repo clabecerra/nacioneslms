@@ -658,8 +658,9 @@ const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
                "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const CABECERAS = ["L","M","M","J","V","S","D"];
 
-let anioActual = 2026;
-let mesActual = 7; // 0 = enero, 7 = agosto
+const hoy = new Date();
+let anioActual = hoy.getFullYear();
+let mesActual = hoy.getMonth(); // 0 = enero, 11 = diciembre
 let cargando = false;
 let ultimoFallo = "";
 
